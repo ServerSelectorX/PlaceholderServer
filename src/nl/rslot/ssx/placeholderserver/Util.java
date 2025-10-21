@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -35,6 +38,19 @@ public class Util {
             os.write(responseBytes);
         }
         http.close();
+    }
+
+    public static <K, V extends ILastUpdate> void prune(Map<K, V> map, long timeoutMs) {
+        Set<K> toRemove = new HashSet<>();
+        for (Map.Entry<K, V> entry : map.entrySet()) {
+            if (System.currentTimeMillis() - entry.getValue().getLastUpdate() > timeoutMs) {
+                toRemove.add(entry.getKey());
+            }
+        }
+
+        for (K key : toRemove) {
+            map.remove(key);
+        }
     }
 
 }

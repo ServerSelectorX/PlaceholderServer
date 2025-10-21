@@ -1,20 +1,22 @@
 package nl.rslot.ssx.placeholderserver;
 
-public class LobbyServer {
+public class LobbyServer implements ILastUpdate {
 
-    private String[] onlinePlayers = new String[0];
+    private final long lastUpdate;
+    private final String[] onlinePlayers;
 
-    LobbyServer() {
+    LobbyServer(final String[] onlinePlayers) {
+        this.lastUpdate = System.currentTimeMillis();
+        this.onlinePlayers = onlinePlayers;
+    }
 
+    @Override
+    public long getLastUpdate() {
+        return this.lastUpdate;
     }
 
     public String[] getOnlinePlayers() {
-        return onlinePlayers;
+        return this.onlinePlayers;
     }
-
-    public void setOnlinePlayers(final String[] newPlayers) {
-        this.onlinePlayers = newPlayers;
-    }
-
 
 }

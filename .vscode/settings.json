@@ -3,7 +3,10 @@
     "java.cleanup.actions": [
         "renameFileToType",
         "organizeImports",
-        "addFinalModifier"
+        "addFinalModifier",
+        "addOverride",
+        "qualifyMembers",
+        "qualifyStaticMembers",
     ],
     "java.maven.downloadSources": true
 }

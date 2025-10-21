@@ -8,9 +8,9 @@ import java.util.Map;
 
 import com.google.gson.JsonObject;
 
-public class Network {
+public class Network implements ILastUpdate {
 
-    private final long lastUpdate;
+    private long lastUpdate;
     private final Map<String, ConnectorServer> connectorServers = new HashMap<>();
     private final Map<String, LobbyServer> lobbyServers = new HashMap<>();
 
@@ -18,21 +18,30 @@ public class Network {
         this.lastUpdate = System.currentTimeMillis();
     }
 
+    @Override
     public long getLastUpdate() {
-        return lastUpdate;
+        return this.lastUpdate;
     }
 
     public void updateConnectorData(final String serverName, final JsonObject data) {
         final ConnectorServer server = new ConnectorServer(serverName, data);
-        connectorServers.put(serverName, server);
+        this.connectorServers.put(serverName, server);
+        this.lastUpdate = System.currentTimeMillis();
     }
 
-    public Collection<ConnectorServer> getServers() {
-        return connectorServers.values();
+    public void updateLobbyData(final String serverName, final String[] onlinePlayers) {
+        final LobbyServer server = new LobbyServer(onlinePlayers);
+        this.lobbyServers.put(serverName, server);
+        this.lastUpdate = System.currentTimeMillis();
     }
 
-    public LobbyServer getLobbyServer(final String name) {
-        return lobbyServers.computeIfAbsent(name, (name2) -> new LobbyServer());
+    public void pruneServers() {
+        Util.prune(this.connectorServers, 60_000);
+        Util.prune(this.lobbyServers, 60_000);
+    }
+
+    public Collection<ConnectorServer> getConnectorServers() {
+        return this.connectorServers.values();
     }
 
     public List<String> getLobbyPlayers() {
