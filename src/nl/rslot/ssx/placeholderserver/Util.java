@@ -3,7 +3,6 @@ package nl.rslot.ssx.placeholderserver;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -32,7 +31,7 @@ public class Util {
 
     public static void sendJsonResponse(HttpExchange http, final JsonElement json) throws IOException {
         byte[] responseBytes = json.toString().getBytes();
-        http.with("Content-Type", Arrays.asList("application/json"));
+        http.getResponseHeaders().set("Content-Type", "application/json");
         http.sendResponseHeaders(200, responseBytes.length);
         try (OutputStream os = http.getResponseBody()) {
             os.write(responseBytes);
