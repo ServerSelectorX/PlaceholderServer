@@ -96,12 +96,12 @@ public class PlaceholderServer {
             String networkId = json.get("network").getAsString();
             Network network = PlaceholderServer.getNetwork(networkId);
 
-            String serverName = json.get("server").getAsString();
+            String lobbyId = json.get("lobby").getAsString();
 
-            PlaceholderServer.LOG.info("receive: network " + networkId + " lobby " + serverName);
+            PlaceholderServer.LOG.info("receive: network " + networkId + " lobby " + lobbyId);
 
             String[] players = Util.jsonToStringArray(json.get("players").getAsJsonArray());
-            network.updateLobbyData(serverName, players);
+            network.updateLobbyData(lobbyId, players);
 
             JsonObject responseJsonServers = new JsonObject();
             for (ConnectorServer server : network.getConnectorServers()) {

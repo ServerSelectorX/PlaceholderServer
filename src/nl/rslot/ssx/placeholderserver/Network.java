@@ -29,9 +29,9 @@ public class Network implements ILastUpdate {
         this.lastUpdate = System.currentTimeMillis();
     }
 
-    public void updateLobbyData(final String serverName, final String[] onlinePlayers) {
+    public void updateLobbyData(final String lobbyId, final String[] onlinePlayers) {
         final LobbyServer server = new LobbyServer(onlinePlayers);
-        this.lobbyServers.put(serverName, server);
+        this.lobbyServers.put(lobbyId, server);
         this.lastUpdate = System.currentTimeMillis();
     }
 
