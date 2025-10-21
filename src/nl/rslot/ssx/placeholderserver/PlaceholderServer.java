@@ -23,6 +23,7 @@ public class PlaceholderServer {
 
     public static void main(String[] args) throws IOException {
         PlaceholderServer.SCHEDULER.scheduleAtFixedRate(PlaceholderServer::pruneNetworks, 5, 10, TimeUnit.MINUTES);
+        PlaceholderServer.SCHEDULER.scheduleAtFixedRate(PlaceholderServer::pruneServers, 5, 5, TimeUnit.SECONDS);
 
         PlaceholderServer.LOG.info("starting web server");
         HttpServer server = HttpServer.create(new InetSocketAddress("0.0.0.0", 8080), 0);
@@ -38,7 +39,9 @@ public class PlaceholderServer {
 
     private static void pruneNetworks() {
         Util.prune(PlaceholderServer.NETWORKS, 300_000);
+    }
 
+    private static void pruneServers() {
         for (Network network : PlaceholderServer.NETWORKS.values()) {
             network.pruneServers();
         }

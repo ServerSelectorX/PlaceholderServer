@@ -36,8 +36,8 @@ public class Network implements ILastUpdate {
     }
 
     public void pruneServers() {
-        Util.prune(this.connectorServers, 60_000);
-        Util.prune(this.lobbyServers, 60_000);
+        Util.prune(this.connectorServers, 10_000);
+        Util.prune(this.lobbyServers, 10_000);
     }
 
     public Collection<ConnectorServer> getConnectorServers() {
