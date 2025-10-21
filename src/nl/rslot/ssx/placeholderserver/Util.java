@@ -1,0 +1,40 @@
+package nl.rslot.ssx.placeholderserver;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Arrays;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import com.sun.net.httpserver.HttpExchange;
+
+public class Util {
+
+    public static String[] jsonToStringArray(final JsonArray json) {
+        final String[] players = new String[json.size()];
+        for (int i = 0; i < json.size(); i++) {
+            players[i] = json.get(i).getAsString();
+        }
+        return players;
+    }
+
+    public static JsonElement readJsonRequest(HttpExchange http) throws IOException {
+        try (InputStream is = http.getRequestBody()) {
+            String requestBody = new String(is.readAllBytes());
+            return JsonParser.parseString(requestBody);
+        }
+    }
+
+    public static void sendJsonResponse(HttpExchange http, final JsonElement json) throws IOException {
+        byte[] responseBytes = json.toString().getBytes();
+        http.with("Content-Type", Arrays.asList("application/json"));
+        http.sendResponseHeaders(200, responseBytes.length);
+        try (OutputStream os = http.getResponseBody()) {
+            os.write(responseBytes);
+        }
+        http.close();
+    }
+
+}

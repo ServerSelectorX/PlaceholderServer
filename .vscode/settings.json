@@ -1,0 +1,9 @@
+{
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.cleanup.actions": [
+        "renameFileToType",
+        "organizeImports",
+        "addFinalModifier"
+    ],
+    "java.maven.downloadSources": true
+}
