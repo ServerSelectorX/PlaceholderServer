@@ -39,6 +39,16 @@ public class Util {
         http.close();
     }
 
+    public static void sendHtmlResponse(HttpExchange http, final String html) throws IOException {
+        byte[] data = html.getBytes();
+        http.getResponseHeaders().set("Content-Type", "text/html");
+        http.sendResponseHeaders(200, data.length);
+        try (OutputStream out = http.getResponseBody()) {
+            out.write(data);
+        }
+        http.close();
+    }
+
     public static <K, V extends ILastUpdate> void prune(Map<K, V> map, long timeoutMs) {
         Set<K> toRemove = new HashSet<>();
         for (Map.Entry<K, V> entry : map.entrySet()) {

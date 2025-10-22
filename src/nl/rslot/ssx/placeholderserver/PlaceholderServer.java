@@ -27,6 +27,7 @@ public class PlaceholderServer {
 
         PlaceholderServer.LOG.info("starting web server");
         HttpServer server = HttpServer.create(new InetSocketAddress("0.0.0.0", 8080), 0);
+        server.createContext("/", PlaceholderServer::handleRoot);
         server.createContext("/connector", PlaceholderServer::handleConnector);
         server.createContext("/lobby", PlaceholderServer::handleLobby);
         server.start();
@@ -45,6 +46,14 @@ public class PlaceholderServer {
         for (Network network : PlaceholderServer.NETWORKS.values()) {
             network.pruneServers();
         }
+    }
+
+    private static void handleRoot(HttpExchange http) throws IOException {
+        String response =
+        """
+        This server facilitates communication between SSX-Connector and ServerSelectorX. For more information, please see the <a href="https://github.com/ServerSelectorX/PlaceholderServer">GitHub page</a>.
+        """;
+        Util.sendHtmlResponse(http, response);
     }
 
     /**
