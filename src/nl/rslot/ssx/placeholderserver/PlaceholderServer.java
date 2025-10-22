@@ -61,11 +61,11 @@ public class PlaceholderServer {
             Network network = PlaceholderServer.getNetwork(networkId);
 
             String serverName = json.get("server").getAsString();
-            JsonObject data = json.get("data").getAsJsonObject();
+            JsonObject placeholders = json.get("placeholders").getAsJsonObject();
 
             PlaceholderServer.LOG.info("receive: network " + networkId + " connector " + serverName);
 
-            network.updateConnectorData(serverName, data);
+            network.updateConnectorData(serverName, placeholders);
 
             JsonArray responsePlayers = new JsonArray();
             for (String player : network.getLobbyPlayers()) {
@@ -105,7 +105,9 @@ public class PlaceholderServer {
 
             JsonObject responseJsonServers = new JsonObject();
             for (ConnectorServer server : network.getConnectorServers()) {
-                responseJsonServers.add(server.getName(), server.getData());
+                JsonObject serverDataJson = new JsonObject();
+                serverDataJson.add("placeholders", server.getData());
+                responseJsonServers.add(server.getName(), serverDataJson);
             }
 
             JsonObject responseJson = new JsonObject();
